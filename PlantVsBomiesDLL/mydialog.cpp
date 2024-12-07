@@ -39,6 +39,8 @@ BEGIN_MESSAGE_MAP(mydialog, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &mydialog::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &mydialog::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &mydialog::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &mydialog::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &mydialog::OnBnClickedButton8)
 END_MESSAGE_MAP()
 
 
@@ -271,4 +273,49 @@ void mydialog::OnBnClickedButton6() {
 
 	//不是放内存是因为退出窗口时，进程还在请求该内存
 	//VirtualFree(pRemoteBuf, 0, MEM_RELEASE);
+}
+
+unsigned char gongJiHookAssembly[] = {
+	0x81, 0xEE, 0xFF, 0xFF, 0x00, 0x00, // sub esi, 0xffff
+	0x89, 0x84, 0x24, 0x1C, 0x00, 0x00, 0x00,//mov [esp+1C], eax
+	0xE9, 0x00, 0x00, 0x00, 0x00
+};
+unsigned char* gongJiCodeMemory = (unsigned char*)VirtualAlloc(NULL, sizeof(gongJiHookAssembly), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+
+/// <summary>
+/// 攻击力修改
+/// </summary>
+void mydialog::OnBnClickedButton7()
+{
+	HookTool ht;
+	DWORD hookAddr = 0x00566D06;
+	DWORD retAddr = 0x00566D0E;
+	// nop 指令用于占位
+	unsigned char nopInstruction[] = { 0x0F,0x1F, 0x00 };
+	unsigned char* nopTarget = (unsigned char*)0x00566D0B;
+	ht.replaceInstructionFun(nopTarget, nopInstruction, 3);
+	ht.hook(hookAddr, retAddr, gongJiCodeMemory, gongJiHookAssembly, 18);
+}
+
+
+unsigned char jiangShiFangYuHookAssembly[] = {
+	0xC7, 0x87, 0xD0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  //mov [edi+000000D0],0
+	0xE9, 0x00, 0x00, 0x00, 0x00
+};
+unsigned char* jiangShiFangYuCodeMemory = (unsigned char*)VirtualAlloc(NULL, sizeof(jiangShiFangYuHookAssembly), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+/// <summary>
+/// 降低僵尸防御力
+/// </summary>
+void mydialog::OnBnClickedButton8()
+{
+	HookTool ht;
+	DWORD hookAddr = 0x00566896;
+	DWORD retAddr = 0x0056689C;
+	// nop 指令用于占位
+	unsigned char nopInstruction[] = { 0x90 };
+	unsigned char* nopTarget = (unsigned char*)0x0056689B;
+	ht.replaceInstructionFun(nopTarget, nopInstruction, 1);
+	ht.hook(hookAddr, retAddr, jiangShiFangYuCodeMemory, jiangShiFangYuHookAssembly, 15);
 }
