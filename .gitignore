@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+*.vs
+*Release
+*x64
+PlantVsBomiesDLL/PlantVsBomiesDLL/Release/*
+PlantVsBomiesDLL/PlantVsBomiesDLL/x64/*
