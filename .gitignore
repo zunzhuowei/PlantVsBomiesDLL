@@ -33,6 +33,7 @@
 
 *.vs
 *Release
+*Debug
 *x64
 PlantVsBomiesDLL/PlantVsBomiesDLL/Release/*
 PlantVsBomiesDLL/PlantVsBomiesDLL/x64/*

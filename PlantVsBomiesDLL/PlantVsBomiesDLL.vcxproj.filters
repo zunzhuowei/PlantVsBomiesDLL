@@ -64,4 +64,9 @@
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="planttreecallfunc2.asm">
+      <Filter>源文件</Filter>
+    </MASM>
+  </ItemGroup>
 </Project>

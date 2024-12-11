@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(mydialog, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON6, &mydialog::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON7, &mydialog::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON8, &mydialog::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON9, &mydialog::OnBnClickedButton9)
 END_MESSAGE_MAP()
 
 
@@ -318,4 +319,26 @@ void mydialog::OnBnClickedButton8()
 	unsigned char* nopTarget = (unsigned char*)0x0056689B;
 	ht.replaceInstructionFun(nopTarget, nopInstruction, 1);
 	ht.hook(hookAddr, retAddr, jiangShiFangYuCodeMemory, jiangShiFangYuHookAssembly, 15);
+}
+
+
+// 外部声明，按照 C 调用约定
+extern "C" void __cdecl planttreecallfunc(int x, int y, int plant_index); 
+//extern "C" void planttreecallfunc(); // 外部声明，按照 C 调用约定
+
+void mydialog::OnBnClickedButton9()
+{
+	planttreecallfunc(1, 0, 0);
+	planttreecallfunc(1, 1, 1);
+	planttreecallfunc(1, 2, 2);
+	planttreecallfunc(1, 3, 3);
+	planttreecallfunc(1, 4, 4);
+	//for (size_t i = 0; i < 9; i++)
+	//{
+	//	for (size_t j = 0; j < 5; j++) {
+	//		planttreecallfunc(i, j, 2);  // 调用 planttreecallfunc 并传递参数
+	//		Sleep(5000); // 延时10000毫秒（即10秒）
+	//	}
+	//}
+	//planttreecallfunc();  // 调用 planttreecallfunc 并传递参数
 }
